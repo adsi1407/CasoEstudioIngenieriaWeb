@@ -5,11 +5,11 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 
 import co.edu.udea.iw.DAO.DataSource;
 import co.edu.udea.iw.DAO.UsuarioDAO;
-import co.edu.udea.iw.DTO.Rol;
 import co.edu.udea.iw.DTO.Usuario;
 import co.edu.udea.iw.EXCEPTION.ClassException;
 
@@ -21,8 +21,20 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 	@Override
 	public void insertar(Usuario usuario) throws ClassException {
-		// TODO Auto-generated method stub
-
+		
+		Session session = null;
+		DataSource ds= new DataSource();
+		Transaction tx;
+		try {
+			session=ds.getSession();
+			tx = session.beginTransaction();
+			session.save(usuario);
+			tx.commit();
+		} catch (HibernateException e) {
+			// TODO: handle exception
+		} finally {
+			session.close();
+		}
 	}
 
 	@Override
